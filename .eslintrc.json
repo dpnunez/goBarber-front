@@ -26,6 +26,7 @@
         "prettier"
     ],
     "rules": {
+      "react/jsx-props-no-spreading": "off",
       "prettier/prettier": "error",
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
@@ -33,6 +34,8 @@
       "import/prefer-default-export": "off",
       "camelcase": "off",
       "@typescript-eslint/ban-types": "off",
+      "react/prop-types": "off",
+      "react/require-default-props": "off",
       "import/extensions": [
           "error",
           "ignorePackages",
