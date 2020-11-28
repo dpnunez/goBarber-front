@@ -1,14 +1,20 @@
 import React from 'react';
-import { FiArrowLeft, FiLock, FiMail, FiUser } from 'react-icons/fi';
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { FiArrowLeft, FiLock, FiMail, FiUser } from 'react-icons/fi';
 
 import { Button, Input } from '../../components';
 import { Content, Background, Container } from './styles';
 
 import logo from '../../assets/logo.svg';
+import { signupValidation } from '../../services/validations';
 
 const SignUp: React.FC = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, errors } = useForm({
+    resolver: yupResolver(signupValidation),
+  });
+
+  console.log(errors);
 
   const onSubmit = (values: object) => {
     console.log(values);
@@ -21,6 +27,7 @@ const SignUp: React.FC = () => {
         <img src={logo} alt="Go Barber" />
         <form onSubmit={handleSubmit(onSubmit)}>
           <Input
+            error={errors.name?.message}
             name="name"
             icon={FiUser}
             type="text"
@@ -28,6 +35,7 @@ const SignUp: React.FC = () => {
             ref={register}
           />
           <Input
+            error={errors.email?.message}
             name="email"
             icon={FiMail}
             type="text"
@@ -35,6 +43,7 @@ const SignUp: React.FC = () => {
             ref={register}
           />
           <Input
+            error={errors.password?.message}
             name="password"
             icon={FiLock}
             type="password"

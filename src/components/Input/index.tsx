@@ -5,15 +5,17 @@ import React, {
   useCallback,
 } from 'react';
 import { IconBaseProps } from 'react-icons';
-import { Container } from './styles';
+import { FiAlertCircle } from 'react-icons/fi';
+import { Container, Error } from './styles';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   icon?: React.ComponentType<IconBaseProps>;
+  error?: string;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ icon: Icon, ...rest }, inputRef) => {
+  ({ icon: Icon, error, ...rest }, inputRef) => {
     const [isFilled, setIsFilled] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
 
@@ -27,7 +29,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     }, []);
 
     return (
-      <Container isFocused={isFocused} isFilled={isFilled}>
+      <Container hasError={!!error} isFocused={isFocused} isFilled={isFilled}>
         {Icon && <Icon size={24} />}
         <input
           type="text"
@@ -36,6 +38,11 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           onBlur={handleBlur}
           ref={inputRef}
         />
+        {error && (
+          <Error title={error}>
+            <FiAlertCircle color="#c53030" />
+          </Error>
+        )}
       </Container>
     );
   },
