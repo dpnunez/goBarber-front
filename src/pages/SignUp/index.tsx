@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FiArrowLeft, FiLock, FiMail, FiUser } from 'react-icons/fi';
@@ -7,18 +7,20 @@ import { Button, Input } from '../../components';
 import { Content, Background, Container } from './styles';
 
 import logo from '../../assets/logo.svg';
-import { signupValidation } from '../../services/validations';
+import { signupValidation } from '../../utils/validations';
 
 const SignUp: React.FC = () => {
   const { register, handleSubmit, errors } = useForm({
     resolver: yupResolver(signupValidation),
   });
 
-  console.log(errors);
-
-  const onSubmit = (values: object) => {
-    console.log(values);
-  };
+  const onSubmit = useCallback(() => {
+    try {
+      console.log('signup');
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
 
   return (
     <Container>

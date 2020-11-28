@@ -8,4 +8,11 @@ const signupValidation = Yup.object().shape({
   password: Yup.string().min(6, 'No mínimo 6 dígitos'),
 });
 
-export { signupValidation };
+const signinValidation = Yup.object().shape({
+  email: Yup.string()
+    .email('Digite um e-mail válido')
+    .required('E-mail obrigatório'),
+  password: Yup.string().required('Senha obrigatória'),
+});
+
+export { signupValidation, signinValidation };
