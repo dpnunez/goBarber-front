@@ -8,16 +8,21 @@ import { Button, Input } from '../../components';
 
 import logo from '../../assets/logo.svg';
 import { signinValidation } from '../../utils/validations';
-import { useAuthDispatch } from '../../context/AuthContext';
+import { useAuthDispatch, useAuthState } from '../../context/AuthContext';
 
 const SignIn: React.FC = () => {
   const { register, errors, handleSubmit } = useForm({
     resolver: yupResolver(signinValidation),
   });
 
-  const onSubmit = useCallback(() => {
+  const { signIn } = useAuthDispatch();
+  const session = useAuthState();
+
+  const onSubmit = useCallback(async credentials => {
     try {
-      console.log('signin');
+      const userInfo = await signIn(credentials);
+
+      console.log(userInfo);
     } catch (err) {
       console.log(err);
     }

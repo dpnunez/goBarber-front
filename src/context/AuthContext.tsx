@@ -1,9 +1,11 @@
 import * as React from 'react';
+import api from '../services/apiClient';
 
 type State = { token: string; user: object };
 
 interface Dispatch {
   signIn(credentials: Credentials): Promise<void>;
+  signOut(): void;
 }
 interface Credentials {
   email: string;
@@ -14,15 +16,38 @@ const AuthStateContext = React.createContext<State>({} as State);
 const AuthDispatchContext = React.createContext<Dispatch>({} as Dispatch);
 
 const AuthProvider: React.FC = ({ children }) => {
-  const [user, setUser] = React.useState<State>({} as State);
+  const [auth, setAuth] = React.useState<State>(() => {
+    const token = localStorage.getItem('@GoBarber:token');
+    const user = localStorage.getItem('@GoBarber:user');
 
-  const signIn = React.useCallback(async ({ password, email }) => {
-    console.log('inside context');
+    if (token && user) {
+      return { token, user: JSON.parse(user) };
+    }
+
+    return {} as State;
+  });
+
+  const signIn = React.useCallback(async (credentials: Credentials) => {
+    const { data } = await api.post('/sessions', credentials);
+    const { token, user } = data;
+
+    localStorage.setItem('@GoBarber:token', token);
+    localStorage.setItem('@GoBarber:user', JSON.stringify(user));
+
+    setAuth({ token, user });
+    return data;
+  }, []);
+
+  const signOut = React.useCallback(() => {
+    localStorage.removeItem('@GoBarber:token');
+    localStorage.removeItem('@GoBarber:user');
+
+    setAuth({} as State);
   }, []);
 
   return (
-    <AuthStateContext.Provider value={user}>
-      <AuthDispatchContext.Provider value={{ signIn }}>
+    <AuthStateContext.Provider value={auth}>
+      <AuthDispatchContext.Provider value={{ signIn, signOut }}>
         {children}
       </AuthDispatchContext.Provider>
     </AuthStateContext.Provider>
