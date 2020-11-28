@@ -4,11 +4,11 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Content, Background, Container } from './styles';
+import { Button, Input } from '../../components';
 
 import logo from '../../assets/logo.svg';
-
-import { Button, Input } from '../../components';
 import { signinValidation } from '../../utils/validations';
+import { useAuthDispatch } from '../../context/AuthContext';
 
 const SignIn: React.FC = () => {
   const { register, errors, handleSubmit } = useForm({
