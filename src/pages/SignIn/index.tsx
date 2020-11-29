@@ -3,6 +3,7 @@ import { FiLock, FiLogIn, FiMail } from 'react-icons/fi';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import { Link } from 'react-router-dom';
 import { Content, Background, Container } from './styles';
 import { Button, Input } from '../../components';
 
@@ -23,7 +24,9 @@ const SignIn: React.FC = () => {
     try {
       await signIn(credentials);
     } catch (err) {
+      addToast({ type: 'info', description: 'aisdajs', title: 'asijdajisji' });
       addToast({ type: 'error', description: 'aisdajs', title: 'asijdajisji' });
+      addToast({ type: 'success', title: 'asijdajisji' });
     }
   }, []);
 
@@ -54,10 +57,10 @@ const SignIn: React.FC = () => {
           <a href="/">esqueci minha senha</a>
         </form>
 
-        <a href="/">
+        <Link to="/signup">
           <FiLogIn size={24} />
           Criar conta
-        </a>
+        </Link>
       </Content>
       <Background />
     </Container>

@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FiArrowLeft, FiLock, FiMail, FiUser } from 'react-icons/fi';
 
+import { Link } from 'react-router-dom';
 import { Button, Input } from '../../components';
 import { Content, Background, Container } from './styles';
 
@@ -56,10 +57,10 @@ const SignUp: React.FC = () => {
           <Button type="submit">Cadastrar</Button>
         </form>
 
-        <a href="/">
+        <Link to="/">
           <FiArrowLeft size={24} />
           Voltar para pagina de login
-        </a>
+        </Link>
       </Content>
     </Container>
   );
