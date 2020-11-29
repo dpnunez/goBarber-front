@@ -8,21 +8,22 @@ import { Button, Input } from '../../components';
 
 import logo from '../../assets/logo.svg';
 import { signinValidation } from '../../utils/validations';
-import { useAuthDispatch, useAuthState } from '../../context/AuthContext';
+import { useAuthDispatch } from '../../contexts/auth';
+import { useToast } from '../../contexts/toast';
 
 const SignIn: React.FC = () => {
   const { register, errors, handleSubmit } = useForm({
     resolver: yupResolver(signinValidation),
   });
 
+  const { addToast } = useToast();
   const { signIn } = useAuthDispatch();
-  const session = useAuthState();
 
   const onSubmit = useCallback(async credentials => {
     try {
       await signIn(credentials);
     } catch (err) {
-      console.log(err);
+      addToast({ type: 'error', description: 'aisdajs', title: 'asijdajisji' });
     }
   }, []);
 
