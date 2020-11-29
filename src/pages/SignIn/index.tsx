@@ -20,9 +20,7 @@ const SignIn: React.FC = () => {
 
   const onSubmit = useCallback(async credentials => {
     try {
-      const userInfo = await signIn(credentials);
-
-      console.log(userInfo);
+      await signIn(credentials);
     } catch (err) {
       console.log(err);
     }
