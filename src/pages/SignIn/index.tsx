@@ -3,7 +3,7 @@ import { FiLock, FiLogIn, FiMail } from 'react-icons/fi';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Content, Background, Container } from './styles';
 import { Button, Input } from '../../components';
 
@@ -16,19 +16,26 @@ const SignIn: React.FC = () => {
   const { register, errors, handleSubmit } = useForm({
     resolver: yupResolver(signinValidation),
   });
+  const history = useHistory();
 
   const { addToast } = useToast();
   const { signIn } = useAuthDispatch();
 
-  const onSubmit = useCallback(async credentials => {
-    try {
-      await signIn(credentials);
-    } catch (err) {
-      addToast({ type: 'info', description: 'aisdajs', title: 'asijdajisji' });
-      addToast({ type: 'error', description: 'aisdajs', title: 'asijdajisji' });
-      addToast({ type: 'success', title: 'asijdajisji' });
-    }
-  }, []);
+  const onSubmit = useCallback(
+    async credentials => {
+      try {
+        await signIn(credentials);
+        history.push('/dashboard');
+      } catch (err) {
+        addToast({
+          type: 'error',
+          title: 'Erro ao realizar o logon',
+          description: 'Tente novamente',
+        });
+      }
+    },
+    [addToast, signIn, history],
+  );
 
   return (
     <Container>

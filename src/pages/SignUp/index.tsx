@@ -3,23 +3,39 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FiArrowLeft, FiLock, FiMail, FiUser } from 'react-icons/fi';
 
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Button, Input } from '../../components';
 import { Content, Background, Container } from './styles';
 
 import logo from '../../assets/logo.svg';
 import { signupValidation } from '../../utils/validations';
+import { useToast } from '../../contexts/toast';
+import { useAuthDispatch, SignupData } from '../../contexts/auth';
 
 const SignUp: React.FC = () => {
+  const { signUp } = useAuthDispatch();
+  const { addToast } = useToast();
+  const history = useHistory();
+
   const { register, handleSubmit, errors } = useForm({
     resolver: yupResolver(signupValidation),
   });
 
-  const onSubmit = useCallback(() => {
+  const onSubmit = useCallback(async (credentials: SignupData) => {
     try {
-      console.log('signup');
+      await signUp(credentials);
+      addToast({
+        type: 'success',
+        title: 'Registrado com sucesso',
+        description: 'Realize seu logon na pagina a seguir',
+      });
+
+      history.push('/');
     } catch (err) {
-      console.log(err);
+      addToast({
+        type: 'error',
+        title: 'Ocorreu um erro no cadastro',
+      });
     }
   }, []);
 

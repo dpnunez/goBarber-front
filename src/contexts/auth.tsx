@@ -6,9 +6,16 @@ type State = { token: string; user: object };
 interface Dispatch {
   signIn(credentials: Credentials): Promise<void>;
   signOut(): void;
+  signUp(userInfo: SignupData): Promise<void>;
 }
-interface Credentials {
+export interface Credentials {
   email: string;
+  password: string;
+}
+
+export interface SignupData {
+  email: string;
+  name: string;
   password: string;
 }
 
@@ -26,6 +33,11 @@ const AuthProvider: React.FC = ({ children }) => {
 
     return {} as State;
   });
+
+  const signUp = React.useCallback(async (userInfo: SignupData) => {
+    await api.post('/users', userInfo);
+    // Redirect to dash (upgrade)
+  }, []);
 
   const signIn = React.useCallback(async (credentials: Credentials) => {
     const { data } = await api.post('/sessions', credentials);
@@ -47,7 +59,7 @@ const AuthProvider: React.FC = ({ children }) => {
 
   return (
     <AuthStateContext.Provider value={auth}>
-      <AuthDispatchContext.Provider value={{ signIn, signOut }}>
+      <AuthDispatchContext.Provider value={{ signIn, signOut, signUp }}>
         {children}
       </AuthDispatchContext.Provider>
     </AuthStateContext.Provider>
